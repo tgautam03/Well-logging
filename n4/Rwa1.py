@@ -19,9 +19,11 @@ NPOR=NPOR.reshape(NPOR.shape[0],1)
 
 ###################TEMP LOG GENERATION##########
 T=70+0.01*Y
+T=(T-32)*5/9
 
 ###################PRESSURE LOG GENERATION##########
 P=0.45*Y
+P=P*0.006895
 
 #################ENVIRONMENT VARIABLES##########
 RHOsh=2.52 #Smectite
@@ -50,7 +52,7 @@ plt.axis([3, 1, 22750, 19900])
 plt.show()
 
 ##################POROSITY#######################
-PHI=(((Vsh*RHOsh)+(1-Vsh)*RHOmatrix)-RHOb)/(((Vsh*RHOsh)+(1-Vsh)*RHOmatrix)-RHOwater)
+PHI=(((Vsh*RHOsh)+(1-Vsh)*RHOmatrix)-RHOb)/(((Vsh*RHOsh)+(1-Vsh)*RHOmatrix)-1)
 
 ####################PHI PLOT#####################
 plt.rcParams['xtick.bottom'] = plt.rcParams['xtick.labelbottom'] = False
@@ -76,13 +78,14 @@ for i in range(10):
     Rwa=np.multiply(Ro[4881],np.power(PHIprev,2))
     print("Rwa is :")
     print(Rwa)
-    print("Temp is :")
-    print(T[4881])
     S=np.power(10,(1/0.995*(np.log10(3647.5)-np.log10(Rwa*(T[4881]/81.77+6.77/81.77)-0.0123))))
+    S=S/1000000
     RHOfluid=RHOwater[4881]+S*(0.668+0.44*S+1/1000000*(300*P[4881]-2400*P[4881]*S+T[4881]*(80+3*T[4881]-3300*S-13*P[4881]+47*P[4881]*S)))
     PHI=(((Vsh[4881]*RHOsh)+(1-Vsh[4881])*RHOmatrix)-RHOb[4881])/(((Vsh[4881]*RHOsh)+(1-Vsh[4881])*RHOmatrix)-RHOfluid)
+    print("PHI is : ")
+    print(PHI)
     PHIprev=PHI
 
 ####################Salinity PLOT####################
-
+print("Salinity is :")
 print(S)
